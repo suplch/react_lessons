@@ -32,6 +32,7 @@
         }
         doneItem(event, todo) {
            console.log(event.target.checked);
+
            let todos = this.state.todos.map((item) => {
                if (todo === item) {
                    return {task: item.task, done: event.target.checked}
@@ -52,12 +53,6 @@
             this.setState({ todos: todos })
         }
         render() {
-
-            // let lis = [];
-            // for(let todo of this.state.todos) {
-            //     let li = <li>{ todo.task }</li>;
-            //     lis.push(li)
-            // }
 
             let doneCount = 0;
             //              通过 数组 的map 函数 方便的 创建 li 标签
