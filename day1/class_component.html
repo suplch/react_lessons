@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script type="text/babel">
+
+    class Welcome extends React.Component {
+
+        constructor(props){
+            super(props);
+            // this.state 表示 组件的 数据模型
+            this.state = {
+                count: 0
+            };
+            // 第一中 方式 将 组件的方法进行 this 绑定, 正确的处理 this 问题
+            //this.increment = this.increment.bind(this)
+        }
+        // 加一操作
+        increment() {
+            let count = this.state.count + 1;
+            // this.state.count++
+            // 需要通过 调用 this.setState 方法来更新数据, 这样才会将最新的数据渲染到界面中
+            this.setState({
+               count: count
+            });
+            console.log(this);
+        }
+        // 减一操作
+        decrement() {
+            // 不要 直接 调用 this.state.count--  这样不起作用
+            // 需要通过 调用 this.setState 方法来更新数据, 这样才会将最新的数据渲染到界面中
+            this.setState({
+                count: this.state.count - 1
+            })
+        }
+
+        render() {
+            return (
+                <div>
+                    <h2>欢迎 {this.props.name} 第 {this.state.count} 次 视察工作</h2>
+                    {/*     第二种 事件 绑定this 方式        */}
+                    <button onClick={this.increment.bind(this)}>增加次数 bind</button>
+                    {/*     第三种 事件处理 直接通过 箭头函数处理  我建议大家平时开发使用这种方式    */}
+                    <button onClick={e => this.decrement()}>减少次数</button>
+                </div>
+
+            )
+        }
+    }
+
+    ReactDOM.render(<Welcome name="大领导" />, document.getElementById('app'));
+
+
+</script>
+</body>
+</html>

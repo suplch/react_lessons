@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+</head>
+<body>
+<div id="app"></div>
+
+<script type="text/babel">
+
+    // 定义一个 组件 ProductList
+    function ProductList(props) {
+
+        let lis = [];
+        for (let goods of props.goodsList) {
+            // 创建 li 标签
+            let li = <li key={goods.id}>{goods.name}</li>;
+            // 将 li 标签 添加到数据 lis 中
+            lis.push(li);
+        }
+        return (
+            <ul>
+                {/* 注释:  将数组变量 lis 插入到 ul 标签中  */}
+                {lis}
+            </ul>
+        )
+    }
+
+    let products = [
+        {id: '111', name: '手机'},
+        {id: '222', name: '电脑'},
+        {id: '333', name: '鼠标'},
+        {id: '444', name: '键盘'},
+    ];
+
+    ReactDOM.render(
+        <div>
+            <ProductList goodsList={products} />
+        </div>,
+        document.getElementById('app'))
+
+</script>
+</body>
+</html>

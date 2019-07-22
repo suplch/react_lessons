@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+    <style>
+        .textColor {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div id="app"></div>
+
+<script type="text/babel">
+
+    /**
+    const hello = (
+        <div>
+            Hello
+            <ul>
+                <li>手机</li>
+                <li>电视</li>
+            </ul>
+        </div>
+    );
+     */
+
+    // 不使用 jsx 语法 创建元素
+        // react 通过 createElement 创建虚拟 dom
+    let hello = React.createElement(
+        'div',
+        {className: 'textColor', name: '领导'},
+        'hello',
+        React.createElement(
+            'ul',
+            null,
+            React.createElement('li', null, '手机'),
+            React.createElement('li', null, '电视')
+        )
+    );
+
+    ReactDOM.render(hello, document.getElementById('app'));
+
+hello = {
+    type: 'div',
+    attrs: {className: 'textColor', name: '领导'},
+    children: [
+        'hello',
+        {
+            type: 'ul',
+            attrs: null,
+            children: [
+                {type: 'li', attrs: null, children: ['手机']},
+                {type: 'li', attrs: null, children: ['电脑']}
+            ]
+        }
+    ]
+}
+
+
+</script>
+</body>
+</html>

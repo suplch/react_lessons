@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- react.development react 库的核心文件 -->
+    <script src="./lib/react.development.js"></script>
+    <!-- react 库的核心文件, 提供 dom 渲染 操作 -->
+    <script src="./lib/react-dom.development.js"></script>
+    <!-- babel.min.js 将 jsx 语法 转换为 浏览器认识 的 js 语法 -->
+    <script src="./lib/babel.min.js"></script>
+    <style>
+        .fontColor {
+            border: 5px solid red;
+        }
+        .inner {
+            border: 5px solid green;
+            margin: 5px;
+        }
+        .h2 {
+            border: 5px solid blue;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+<div id="app"></div>
+<!-- 注意 设置 type 属性 为 text/babel  用来 将 jsx 语法 转换为普通 js -->
+<script type="text/babel">
+
+    // 用函数声明 表示一个组件 Welcome
+    function Welcome(props) {
+        return (
+            <h2 className="h2">欢迎 {props.name} 光临, {props.doing}</h2>
+        )
+    }
+
+
+
+    // HelloWorld 组件
+    function HelloWorld(props) {
+        console.log(props);
+
+        return (
+            <div className="fontColor">
+                Hello World !!!!!!!!!!!!!!!!!
+                { /* props.inner 外部传过来了的一个参数 */ }
+                { props.inner }
+                <p> 这时我第一个 react js 程序</p>
+                <hr/>
+                { props.children }
+                <hr/>
+                {/* onClick 是react环境的点击事件  点击按钮调用外部传过来的函数       */}
+                <button onClick={props.onButtonClick}>点击我</button>
+            </div>
+        );
+    }
+    // 方式一 直接调用函数 来生产 虚拟 dom 元素
+    //let hello = HelloWorld({name: '领导', doing: '视察工作'});
+
+    // 方式二  写标签 来 生成 虚拟dom 元素
+    //let hello = <HelloWorld name="领导" doing="视察工作" />;
+
+    // let hello = <div>
+    //     Hello World !!!
+    //     <p> 这时我第一个 react js 程序</p>
+    // </div>;
+
+    // 声明了一个 事件处理函数
+    function clickHelloWorld() {
+        alert('Hello world 组件 里面的button 被点击了');
+    }
+
+    // 声明了一个 welcome 元素
+    let welcome = <Welcome name="小王" doing="学习" />;
+    //let welcome = React.createElement(Welcome, {name: '小王', doing: '学习'});
+
+    ReactDOM.render(
+        //                     //  将 welcome 元素 传入组件进行显示  将 函数 clickHelloWorld 传入组件中
+        <HelloWorld name="领导" doing="视察工作" inner={welcome} onButtonClick={clickHelloWorld} >
+            <div className="inner">
+                这时一个 Hello World组件
+            </div>
+
+        </HelloWorld>,
+        document.getElementById('app')
+    )
+</script>
+</body>
+</html>

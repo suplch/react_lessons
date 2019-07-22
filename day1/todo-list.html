@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+    <style>
+        .done {
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+<body>
+<div id="app"></div>
+
+<script type="text/babel">
+
+    class TodoList extends React.Component {
+        constructor(props) {
+            super(props);
+            //                  React.createRef() 创建一个引用 来表示 具体的 html 元素
+            this.taskInputRef = React.createRef();
+            this.state = {
+                todos: [
+                    {task: '早上吃饭', done: false},
+                    {task: '背面试题', done: false},
+                    {task: '上课',     done: false},
+                ]
+            }
+        }
+        doneItem(event, todo) {
+           console.log(event.target.checked);
+           let todos = this.state.todos.map((item) => {
+               if (todo === item) {
+                   return {task: item.task, done: event.target.checked}
+               } else {
+                   return item;
+               }
+           });
+           this.setState({
+               todos: todos
+           })
+        }
+        addTask() {
+            //                               current 属性表示绑定的那个 html 原生元素
+            let taskText = this.taskInputRef.current.value;
+            //          es6 数组展开语法糖 创建新数组
+            let todos = [...this.state.todos, {task: taskText, done: false}];
+            // 修改数据模型, 更新组件, 触发 调用 render 函数 重新渲染界面
+            this.setState({ todos: todos })
+        }
+        render() {
+
+            // let lis = [];
+            // for(let todo of this.state.todos) {
+            //     let li = <li>{ todo.task }</li>;
+            //     lis.push(li)
+            // }
+
+            let doneCount = 0;
+            //              通过 数组 的map 函数 方便的 创建 li 标签
+            let lis = this.state.todos.map((todo, index) => {
+                if (todo.done) {
+                    doneCount++;
+                }
+                return (
+                    <li className={ todo.done ? 'done' : '' } key={index}>
+                        序号:  {index + 1} { todo.task }
+                        <input onChange={e => this.doneItem(e, todo)} type="checkbox" checked={todo.done} />
+                    </li>
+                )
+            });
+
+            return (
+                <div>
+                    { /*   ref 用来绑定一个引用               */ }
+                    <input ref={this.taskInputRef} type="text" /> <button onClick={e => this.addTask()}>添加任务</button>
+                    <ul>
+                        {lis}
+                    </ul>
+                    已完成: { doneCount } {/* 已完成 doneCount */}
+                    未完成: {  this.state.todos.length - doneCount }
+                </div>
+            )
+        }
+    }
+    ReactDOM.render(<TodoList/>, document.getElementById('app'))
+</script>
+</body>
+</html>

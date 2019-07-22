@@ -1,5 +1,5 @@
 ### ReactJS 
-https://react.docschina.org
+中文官网地址 : https://react.docschina.org
 ```html
     <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
@@ -21,7 +21,7 @@ https://react.docschina.org
         - render 方法返回 jsx 作为组件外观
 - TodoList 综合演示
 
-- 数据挂在
+- 数据挂载
     + 通过属性挂载
     + 通过类状态挂载
     + 纯函数组件是无状态组件
@@ -35,3 +35,4 @@ https://react.docschina.org
 - npm install create-react-app -g
 - npx create-react-app my-app
 - cd my-app
+- npm run start
