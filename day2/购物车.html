@@ -15,7 +15,7 @@
     class OldBrother extends React.Component{
         addToCart(goods) {
             console.log(goods);
-
+            // 通知 父组件 选择一个商品
             this.props.onPickGoods(goods)
         }
         render() {
@@ -47,20 +47,22 @@
         }
         render() {
             let goodsItems = this.props.goodsItems;
-            let total = 0;
+            let total = 0;  // 表示 合计金额
             let lis = goodsItems.map((goods, index) => {
-                total += goods.price * goods.count;
+                total += goods.price * goods.count;  // 将每一种 商品的 总价 累积 到 total 中
                 let minusButton = null;
-                if (goods.count > 1) {
+                if (goods.count > 1) { // 当数量 大于一的时候 才显示 减1 按钮
+                    // 创建 一个 按钮 用来 递减 商品数量   调用 addCount 方法 传递 -1 表示要减去一个商品数量
                     minusButton = <button onClick={ e => this.addCount(-1, goods.id)}>-</button>;
                 }
                 return (
                     <li key={goods.id}>
-                        { goods.name }  单价: { goods.price }
-                        数量: { goods.count }
+                        商品名称: { goods.name }  单价: { goods.price }
+                        数量: { goods.count }         {/* 增加商品数量 */}
                         <button onClick={ e => this.addCount(1, goods.id) }>+</button>
                         { minusButton }
                         总价: { goods.price * goods.count }
+                        { /*                  删除一个商品     */}
                         <button onClick={e => this.removeItem(goods)}>删除</button>
                     </li>
                 )
@@ -81,7 +83,7 @@
         constructor(props) {
             super(props);
             this.state = {
-                oldBrother: {
+                oldBrother: {// 产品列表
                     goodsList: [
                         {id: '111', name: '手机', price: 5000},
                         {id: '222', name: '鼠标', price: 200},
@@ -89,37 +91,37 @@
                         {id: '444', name: '显示器', price: 2000},
                     ]
                 },
-                youngBrother: {
+                youngBrother: { // 购物车 商品列表
                     goodsItems: [
                     ]
                 }
             }
         }
-        addToCart(goods) {
+        addToCart(goods) { // 添加一个商品到购物车
             let goodsItems = this.state.youngBrother.goodsItems;
             let newGoodsItems = [];
-            let exist = false;
+            let exist = false;   // 指示 商品是否已经再购物车里了
             for (let item of goodsItems) {
-                if (item.id === goods.id) {
+                if (item.id === goods.id) { // 如果 商品在购物车里已经存在, 那么 就 仅仅 增加 count 数量
                     exist = true;
                     newGoodsItems.push({id: goods.id, name: goods.name, price: goods.price, count: item.count + 1});
                 } else {
                     newGoodsItems.push(item);
                 }
             }
-            if (!exist) {
+            if (!exist) { // 如果不在 购物车里, 那么把当前商品 追加 到购物车里, 同时 数量 为 1
                 newGoodsItems.push({id: goods.id, name: goods.name, price: goods.price, count: 1})
             }
             this.setState({
-                youngBrother: {
+                youngBrother: {  // 将最新的购物车数据 设置到 状态 state 里, 更新界面
                     goodsItems: newGoodsItems
                 }
             })
         }
-        changeItemCount(n, goods_id) {
+        changeItemCount(n, goods_id) {// 修改购物车 中的商品 树龄
             let goodsItems = this.state.youngBrother.goodsItems;
             let newGoodsItems = goodsItems.map((goods, index) => {
-                if (goods.id === goods_id) {
+                if (goods.id === goods_id) { // 如果 条件 true 表示 找到了 要修改的位置 返回 最新的数据 count + 1
                     return {id: goods_id, name: goods.name, price: goods.price, count: goods.count + n}
                 } else {
                     return goods;
@@ -131,28 +133,30 @@
                 }
             })
         }
-        removeCartItem(goods) {
+        removeCartItem(goods) { // 删除 一条购物车数据
             let goodsItems = this.state.youngBrother.goodsItems;
             let newGoodsItems = [...goodsItems];
-            let position = newGoodsItems.indexOf(goods);
-            newGoodsItems.splice(position, 1);
+            let position = newGoodsItems.indexOf(goods);  // 找到要删除的位置
+            newGoodsItems.splice(position, 1);  // 删除 对应的数据
             this.setState({
                 youngBrother: {
-                    goodsItems: newGoodsItems
+                    goodsItems: newGoodsItems  // 将最新的数据 设置到state 中, 引发 ui 的重新渲染
                 }
             })
         }
         render() {
-            const goodsList = this.state.oldBrother.goodsList;
-            const goodsItems = this.state.youngBrother.goodsItems;
+            const goodsList = this.state.oldBrother.goodsList;  // 商品数据
+            const goodsItems = this.state.youngBrother.goodsItems; // 购物车 数据
             return (
                 <div style={ {border: 'solid 5px red', margin: '10px', height: '600px'} }>
                     father
                     <OldBrother onPickGoods={ (goods) => { this.addToCart(goods) } }
                                 goodsList={goodsList}/>
-
+                    {/*           事件 onRemoveGoods 表示 一条商品要被删除了       */}
                     <YoungBrother onRemvoeGoods={(goods) => { this.removeCartItem(goods) } }
+                                  { /*  修改数量的事件   */ }
                                   onChangeCount={ (n, goods_id) => { this.changeItemCount(n, goods_id) } }
+                                  { /*  将购物车数据 传递给 购物车组件 */ }
                                   goodsItems={goodsItems} />
                 </div>
             )
