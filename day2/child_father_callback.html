@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+
+<script>
+
+    class Child {
+
+        constructor(props) {
+            console.log(props)
+            console.log(props.house);
+            console.log(props.money);
+            props.onNoMoney(100000000);
+        }
+
+    }
+
+    class Father {
+
+        constructor() {
+
+            this.state = {
+                money: 1000
+            };
+            let childMoney = this.state.money / 2;
+
+            this.child = new Child({
+                house: '四合院',
+                money: childMoney,
+                onNoMoney: (needMoney) => {
+                    console.log(`给${needMoney}, 吐血`)
+
+                    this.moreHardWork();
+                }
+            })
+        }
+
+        moreHardWork() {
+            console.log('努力工作')
+        }
+
+    }
+
+    new Father();
+
+
+function add(a, b) {
+    return a + b;
+}
+
+let add2 = add;
+
+console.log(add);
+console.log(add2);
+
+    console.log(add === add2);
+
+    let addstring = add + '';
+
+    console.log(addstring)
+
+    let fn = eval('(' + addstring + ')')
+
+    let r = fn(3, 6);
+
+    console.log(r)
+
+    console.log(add === fn)
+</script>
+</body>
+</html>

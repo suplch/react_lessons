@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+</head>
+<body>
+<div id="app"></div>
+
+<script type="text/babel">
+
+    class OldBrother extends React.Component{
+
+        addToCart(goods) {
+            console.log(goods);
+
+            this.props.onPickGoods(goods)
+        }
+
+        render() {
+            let goodsList = this.props.goodsList;
+            return (
+                <div style={ {border: 'solid 5px blue', margin: '10px', height: '200px'} }>
+                    产品列表
+                    <ul>
+                        { goodsList.map((goods, index) => {
+                            return (
+                                <li key={goods.id}>
+                                    { goods.name } 价格: { goods.price }
+                                    <button onClick={e => this.addToCart(goods)}>添加到购物车</button>
+                                </li>
+                            );
+                        }) }
+                    </ul>
+                </div>
+            )
+        }
+    }
+
+    class YoungBrother extends React.Component{
+
+        addCount(n, id) {
+            this.props.onChangeCount(n, id)
+        }
+
+        removeItem(goods) {
+            this.props.onRemvoeGoods(goods)
+        }
+
+        render() {
+
+            let goodsItems = this.props.goodsItems;
+
+            let total = 0;
+
+            let lis = goodsItems.map((goods, index) => {
+
+                total += goods.price * goods.count;
+
+                let minusButton = null;
+                if (goods.count > 1) {
+                    minusButton = <button onClick={ e => this.addCount(-1, goods.id)}>-</button>;
+                }
+
+                return (
+                    <li key={goods.id}>
+                        { goods.name }  单价: { goods.price }
+                        数量: { goods.count }
+                        <button onClick={ e => this.addCount(1, goods.id) }>+</button>
+                        { minusButton }
+
+
+                        总价: { goods.price * goods.count }
+
+                        <button onClick={e => this.removeItem(goods)}>删除</button>
+
+
+                    </li>
+                )
+            });
+
+            return (
+                <div style={ {border: 'solid 5px green', margin: '10px', height: '200px'} }>
+                    我的购物车:
+                    <ul>
+                        { lis }
+                    </ul>
+
+                    合计: { total }
+                </div>
+            )
+        }
+    }
+
+    class Father extends React.Component{
+
+        constructor(props) {
+            super(props)
+
+            this.state = {
+                oldBrother: {
+                    goodsList: [
+                        {id: '111', name: '手机', price: 5000},
+                        {id: '222', name: '鼠标', price: 200},
+                        {id: '333', name: '键盘', price: 300},
+                        {id: '444', name: '显示器', price: 2000},
+
+                    ]
+                },
+                youngBrother: {
+                    goodsItems: [
+                    ]
+                }
+            }
+        }
+
+        addToCart(goods) {
+
+            let goodsItems = this.state.youngBrother.goodsItems;
+
+            let newGoodsItems = [];
+            let exist = false;
+            for (let item of goodsItems) {
+                if (item.id === goods.id) {
+                    exist = true;
+                    newGoodsItems.push({id: goods.id, name: goods.name, price: goods.price, count: item.count + 1});
+                } else {
+                    newGoodsItems.push(item);
+                }
+            }
+
+            if (!exist) {
+                newGoodsItems.push({id: goods.id, name: goods.name, price: goods.price, count: 1})
+            }
+
+            this.setState({
+                youngBrother: {
+                    goodsItems: newGoodsItems
+                }
+            })
+        }
+
+        changeItemCount(n, goods_id) {
+            let goodsItems = this.state.youngBrother.goodsItems;
+            let newGoodsItems = goodsItems.map((goods, index) => {
+                if (goods.id === goods_id) {
+                    return {id: goods_id, name: goods.name, price: goods.price, count: goods.count + n}
+                } else {
+                    return goods;
+                }
+            });
+
+            this.setState({
+                youngBrother: {
+                    goodsItems: newGoodsItems
+                }
+            })
+        }
+
+        removeCartItem(goods) {
+            let goodsItems = this.state.youngBrother.goodsItems;
+            let newGoodsItems = [...goodsItems];
+            let position = newGoodsItems.indexOf(goods);
+            newGoodsItems.splice(position, 1);
+
+            this.setState({
+                youngBrother: {
+                    goodsItems: newGoodsItems
+                }
+            })
+        }
+
+        render() {
+
+            const goodsList = this.state.oldBrother.goodsList;
+
+            const goodsItems = this.state.youngBrother.goodsItems;
+
+            return (
+                <div style={ {border: 'solid 5px red', margin: '10px', height: '600px'} }>
+                    father
+
+                    <OldBrother onPickGoods={ (goods) => { this.addToCart(goods) } } goodsList={goodsList}/>
+
+                    <YoungBrother onRemvoeGoods={(goods) => { this.removeCartItem(goods) } } onChangeCount={ (n, goods_id) => { this.changeItemCount(n, goods_id) } }  goodsItems={goodsItems} />
+
+                </div>
+            )
+        }
+    }
+
+
+    ReactDOM.render(<Father/>, document.getElementById('app'))
+
+</script>
+</body>
+</html>

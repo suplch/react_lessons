@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+</head>
+<body>
+<div id="app"></div>
+
+<script type="text/babel">
+    class Child extends React.Component {
+        constructor(props) {
+            super(props)
+            console.log(props)
+        }
+        hardPlay() { // 努力玩
+            console.log('努力玩.....');
+            this.props.onNoMoney(50000); // 通知 老爸组件 努力工作
+        }
+        render() {
+            let { house, money } = this.props;
+            return (
+                <div style={
+                    {border: 'solid 5px blue', width: '300px', height: '200px', margin: '20px'} }>
+                    Child             { /*  点击按钮 调用 hardPlay 方法   */ }
+                    <button onClick={e => this.hardPlay()}> 努力玩 </button>
+                    { house }, { money }
+                </div>
+            )
+        }
+    }
+    class Father extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = {
+                property: {
+                    money: 1000000
+                }
+            }
+        }
+        hardWork() { // 老爸 努力工作
+            let money = this.state.property.money + 1000;
+            this.setState({
+                property: {
+                    money: money
+                }
+            })
+        }
+        moreHardWork (needMoney) { // 老爸更加努力工作
+            let money = this.state.property.money + 5000 + needMoney;
+            this.setState({
+                property: {
+                    money: money
+                }
+            })
+        }
+        render() {
+            let money = this.state.property.money;
+            // 将 钱分一半 给 儿子 组件
+            let childMoney = money / 2;
+            return (
+                <div style={ {border: 'solid 5px green', width: '400px', height: '300px', margin: '20px'} }>
+                    Father  老爸的钱 { money }
+                    <button onClick={e => this.hardWork()}>努力工作</button>
+                    <Child house="四合院"
+                           money={childMoney}
+                           onNoMoney={
+
+                               (e) => {
+                                    console.log(e); this.moreHardWork(e)
+                               }
+
+                           } />
+                </div>
+            )
+        }
+    }
+    class Box extends React.Component {
+        constructor(props) {
+            super(props)
+        }
+        render() {
+            return (
+                <div style={ {border: 'solid 5px red', width: '500px', height: '400px', margin: '20px'} }>
+                    Box
+                    <Father/>
+                </div>
+            )
+        }
+    }
+    ReactDOM.render(<Box/>, document.getElementById('app'));
+</script>
+</body>
+</html>

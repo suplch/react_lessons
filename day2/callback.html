@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+
+<script >
+
+
+    var obj = {
+        name: 'zhang',
+        age: 18,
+        onNoMoney: function () {
+            console.log('no money');
+        }
+    };
+
+
+    var obj1 = obj;
+    var obj2 = obj;
+
+
+    obj.name = 'li';
+
+
+    console.log(obj === obj1);
+    console.log(obj === obj2);
+    console.log(obj1 === obj2);
+
+    var fn = obj.onOnMoney;
+
+    obj.onNoMoney = function () {
+        console.log('no money 222')
+    }
+
+    fn = null;
+
+
+    // var fn = () => {
+    //     console.log('===>>>>')
+    // };
+    //
+    //
+    // var fn1 = fn;
+    //
+    // fn1();
+    //
+    // var fn2 = fn;
+    //
+    //
+    // console.log( fn1  === fn);
+    // console.log( fn2  === fn);
+    // console.log( fn1  === fn2);
+
+
+
+
+
+
+    // function filter(items, conditionFn) {
+    //
+    //     let result = [];
+    //
+    //     for (let item of items) {
+    //         if (conditionFn(item)) {
+    //             result.push(item)
+    //         }
+    //     }
+    //
+    //     return result
+    // }
+    //
+    //
+    // var allStudent = [
+    //     {name: 'zhang', score: 80},
+    //     {name: 'li', score: 90},
+    //     {name: 'wang', score: 50},
+    // ];
+    //
+    // console.log(allStudent)
+    //
+    //
+    // var condition = (item) => {
+    //     return item.score >= 60;
+    // };
+    //
+    // let students = filter(allStudent, condition);
+    //
+    // console.log(students);
+
+
+</script>
+</body>
+</html>
