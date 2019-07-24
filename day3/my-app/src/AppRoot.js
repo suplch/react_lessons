@@ -1,5 +1,6 @@
 import React from 'react';
-import Welcome from './components/highorder/Welcome'
+import Welcome from './components/highorder/Welcome';
+import GoodBye from './components/highorder/GoodBye';
 // 创建一个高阶组件, 对现有的组件进行扩展
 function createWelcomeTo(place, WelcomeComponent) {
     return function (props) { // 返回函数式高阶组件
@@ -8,6 +9,20 @@ function createWelcomeTo(place, WelcomeComponent) {
         )
     }
 }
+
+function createWelcomeAndGoodBye(place, WelcomeComponent, GoodByeComponent) {
+    return function (props) { // 返回函数式高阶组件
+        return (
+            <div style={ {border: 'solid 5px orange'} }>
+                <WelcomeComponent name={props.name} place={place}  />
+                <hr/>
+                <GoodByeComponent/>
+            </div>
+        )
+    }
+}
+
+
 // 创建一个高阶组件, 对现有的组件进行扩展
 function createWelcomePerson(name, WelcomeComponent) {
     return class Wrap extends React.Component { // 返回 class 类型的组件
@@ -44,6 +59,11 @@ const WelcomeBeijing = createWelcomeTo('北京', Welcome);
 const WelcomeXiaozhang = createWelcomePerson('小张', Welcome);
 const WelcomeXiaoli = createWelcomePerson('小李', Welcome);
 
+
+const WelcomeAndGoodBye = createWelcomeAndGoodBye('武汉 前锋', Welcome, GoodBye);
+
+
+
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -66,6 +86,10 @@ class App extends React.Component {
                 <hr/>
                 {/* 使用固定 name 属性的高阶组件 */}
                 <WelcomeXiaoli place="美国" />
+                <hr/>
+
+                <WelcomeAndGoodBye name="小灶"/>
+
             </div>
         )
     }

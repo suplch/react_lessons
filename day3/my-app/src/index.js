@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './style.css';
 // import App from './App';
-import AppRoot from './AppRoot'
+//import AppRoot from './AppRoot'
 
-ReactDOM.render(<AppRoot />, document.getElementById('root'));
+import AppLifeCycle from './AppLifeCycle';
+
+ReactDOM.render(<AppLifeCycle />, document.getElementById('root'));
