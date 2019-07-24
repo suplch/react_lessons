@@ -27,8 +27,18 @@ class App extends React.Component {
     })
   }
 
+  testMethod(argv) {
+    console.log(argv, this)
+  }
+
   render() {
     let state = this.state;
+
+    //state.testMethod = this.testMethod.bind(this);
+    state.testMethod = (argv) => { this.testMethod(argv) };
+
+
+
     console.log(MyContext);
     return (
         <div>

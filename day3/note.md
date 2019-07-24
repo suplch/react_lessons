@@ -24,15 +24,15 @@ this.context // 获取上下文参数
 - 生命周期各个阶段
     + 初始化阶段
         - constructor
-        - getDerivedStateFromProps
+        - getDerivedStateFromProps(nextProps, prevState): nextState
         - render
         - componentDidMount
     + 运行中阶段
-        - getDerivedStateFromProps
-        - shouldComponentUpdate
+        - static getDerivedStateFromProps(nextProps, prevState): nextState
+        - shouldComponentUpdate(nextProps, nextState): boolean
         - render
-        - getSnapshotBeforeUpdate
-        - componentDidUpdate
+        - getSnapshotBeforeUpdate(prevProps, prevState): snapValue
+        - componentDidUpdate(prevProps, prevState, snapshot)
     + 销毁阶段
         - componentWillUnmount
 
@@ -118,4 +118,25 @@ export default connect(mapStateToProps, mapDispatchToProps)(组件)
 ### Redux-thunk
 - https://github.com/reduxjs/redux-thunk
 - 实现 redux 的 异步操作
+```ecmascript 6
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+import rootReducer from './reducers/index';
 
+// Note: this API requires redux@>=3.1.0
+const store = createStore(
+  rootReducer,
+  applyMiddleware(thunk)
+);
+
+//...
+dispatch({type: 'INC'});
+// 或者, 异步调用
+dispatch((dispatch, getState) => {
+
+    setTimeout(function () {
+        console.log(getState());
+        dispatch({type: 'INC'});
+    }, 1000);
+})
+```

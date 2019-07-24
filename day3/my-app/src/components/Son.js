@@ -14,6 +14,8 @@ export default  class Son extends Component {
         //  this.context 属性可以获取到 上下文数据
         console.log('Son ', this.context);
 
+        this.context.testMethod(' from son');
+
         return (
             <MyContext.Consumer>
                 {
