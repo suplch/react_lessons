@@ -12,9 +12,11 @@
 
 <script type="text/babel">
 
+
     class OldBrother extends React.Component{
         addToCart(goods) {
             console.log(goods);
+
             // 通知 父组件 选择一个商品
             this.props.onPickGoods(goods)
         }
@@ -39,6 +41,12 @@
     }
 
     class YoungBrother extends React.Component{
+
+        constructor(props) {
+            super(props)
+
+        }
+
         addCount(n, id) {
             this.props.onChangeCount(n, id)
         }
