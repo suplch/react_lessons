@@ -1,0 +1,21 @@
+.Grandpa {
+    border: solid 5px red;
+    margin: 10px;
+    width: 300px;
+    height: 450px;
+}
+
+.Father {
+    border: solid 5px green;
+    margin: 10px;
+    width: 250px;
+    height: 400px;
+}
+
+
+.Son {
+    border: solid 5px blue;
+    margin: 10px;
+    width: 200px;
+    height: 200px;
+}
