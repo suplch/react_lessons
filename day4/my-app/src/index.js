@@ -15,6 +15,7 @@ const state = {
 };
 */
 //  导入 redux 模块, createStore 是用来创建 状态存储库
+/*
 import { createStore } from 'redux';
 function exist(items, product_id) {
     let index = 0;
@@ -111,17 +112,27 @@ store.dispatch({ type: 'PICK_PRODUCT', product: {id: '444', name: '键盘', pric
 // debugger;
 // store.dispatch({ type: 'DECREMENT' });  // 通过 状态存储库 despatch 分发一个 DECREMENT action 动作,
 
+*/
 
 
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import { createStore } from 'redux'
+
+import { Provider } from 'react-redux';
+
+import './style.css';
+
+import AppShoppingCart from './AppShoppingCart';
+
+import store from './store';
 
 
+ReactDOM.render(  // 将 store 注入到 context 上下文中
+    <Provider store={store}>
+        <AppShoppingCart/>
+    </Provider>,
 
-
-
-
-// import React from 'react';
-// import ReactDOM from 'react-dom';
-// import './style.css';
-// import App from './App';
-//
-// ReactDOM.render(<App />, document.getElementById('root'));
+    document.getElementById('root')
+);
