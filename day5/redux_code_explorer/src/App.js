@@ -7,13 +7,23 @@ function App(props) {
 
   console.log(props)
 
+    let myStore = {
+      name: 'this is a store'
+    };
+
   return (
     <div>
       app
-      <Provider>
+      <Provider myStore={myStore}>
         <Child name="zhang" age={18}/>
         Hello
         <button name="btn"> click me</button>
+          {
+              (() => {
+                  return <button>Hello button</button>
+              })()
+          }
+          <hr/>
       </Provider>
     </div>
   );

@@ -48,13 +48,52 @@ function mapStateToProps(state) {
     }
 }
 
+function postAddProduct(product) {
+
+    return  new Promise(function (resolve, reject) {
+
+        setTimeout(function () {
+            resolve({...product, id: '1223432424'})
+        }, 3000)
+
+    });
+}
+
+
 function mapDispatchToProps(dispatch) {
     return {
         pickProduct(product) {
             dispatch( { type: 'PICK_PRODUCT',  product: product} )
         },
-        addProduct(product) {
-            dispatch( { type: 'ADD_PRODUCT',  product: product} )
+        async addProduct(product) {
+            // 当dispatch 接受到的是一个 回调函数, 那么 dispatch 返回 Promise
+            //  用来处理复杂异步操作
+            /*
+            dispatch((dispatch, getState) => {
+
+                return postAddProduct(product).then(function (result) {
+                    dispatch( { type: 'ADD_PRODUCT',  product: result} )
+                });
+
+            }).then(function () {
+                console.log('Done!');
+
+            })
+            */
+
+            await dispatch(async (dispatch, getState) => {
+
+                let result = await postAddProduct(product);
+                dispatch( { type: 'ADD_PRODUCT',  product: result} );
+
+                // return postAddProduct(product).then(function (result) {
+                //     dispatch( { type: 'ADD_PRODUCT',  product: result} )
+                // });
+
+            });
+            console.log('Done!');
+
+
         }
     }
 }

@@ -3,10 +3,13 @@ import React from 'react';
 
 function Provider(props) {
     console.log(props);
-
+debugger
+    let i = 0;
     for (let el of props.children) {
-        debugger;
-        console.log(el.type)
+        if (typeof el.type === 'function') {
+            el.type.prototype.testData = props.myStore
+        }
+        i++;
     }
 
     return (
