@@ -1,12 +1,16 @@
 import React from 'react';
 // 导入 react路由
 import { BrowserRouter, Route, Link, Switch, Redirect } from 'react-router-dom';
+import { MyRoute } from './my-router-dom/MyRoute'
 
 import Home from './pages/Home';
 import About from './pages/About';
 import Users from './pages/Users';
 import UserDetail from './pages/UserDetail'
 import Parent from './pages/Parent';
+
+import Custom from './pages/Custom';
+
 
 function Always(props) {
     return (
@@ -35,7 +39,6 @@ function App() {
                   <li>
                       <Link to="/users">用户列表</Link>
                   </li>
-
               </ul>
               {/* 通过 Switch 组件 匹配一个 路由对象 */}
               <Switch>
@@ -53,10 +56,10 @@ function App() {
               </Switch>
               {/* 总是会匹配一个 Always 组件 因为没有提供 path 参数 */}
               <Route component={Always} />
+              <hr/>
+                <MyRoute path="/myroute/:id/:type" component={Custom} />
           </div>
       </BrowserRouter>
-
   );
 }
-
 export default App;
