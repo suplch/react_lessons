@@ -21,15 +21,33 @@ import enterpriseOrderReducer from './order/enterpriseOrder';
 // });
 
 
-function appReducer(state = stateStruct, action ) {
+// function appReducer(state = stateStruct, action ) {
+//
+//     const map = new Map({});
+//     // map set 方法会返回新值
+//     return map
+//         .set('goods', goodsReducer(state.get('goods'), action))
+//         .set('shoppingCart',shoppingCartReducer(state.get('shoppingCart'), action));
+//
+// }
 
-    const map = new Map({});
-    // map set 方法会返回新值
-    return map
-        .set('goods', goodsReducer(state.get('goods'), action))
-        .set('shoppingCart',shoppingCartReducer(state.get('shoppingCart'), action));
+const appReducer = combineReducers_im({
+    goods: goodsReducer,
+    shoppingCart: shoppingCartReducer
+});
 
+function combineReducers_im(options) {
+    return function (state = Map(), action) {
+        let wrap = Map();
+        for (let p in options) {
+            if (options.hasOwnProperty(p)) {
+                wrap = wrap.set(p, options[p](state.get(p), action))
+            }
+        }
+        return wrap;
+    }
 }
+
 
 //                                  使用 thunk 中间件
 const store = createStore(appReducer, applyMiddleware(thunk));
