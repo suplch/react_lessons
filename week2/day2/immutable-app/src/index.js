@@ -1,8 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 
-import { ImApp }  from './ImApp'
+import store from './store'
+
+import App from './imReduxApp';
 
 ReactDOM.render(
-    <ImApp />,
+    <Provider store={store}>
+        <App />
+    </Provider>,
     document.getElementById('root'));

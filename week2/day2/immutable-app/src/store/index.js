@@ -1,34 +1,46 @@
 
-import { createStore } from 'redux';
+import { createStore } from 'redux'
+import {fromJS, List, Map} from "immutable";
 
-import { fromJS } from 'immutable';
-
-const initState = fromJS({
-    name: '张三',
+const imState = fromJS({
+    name: '李',
+    age: 18,
     address: {
-        city: '',
-        region: ''
+        city: '武汉',
+        region: '江夏'
     },
-    hobbies: [{
-        name: 'JavaScript',
-        desc: '一门前端语言'
-    }]
+    hobbies: [
+        {name: 'JavaScript', desc: '是一种前端编程语言'},
+        {name: '王者荣耀', desc: '一种流行手机游戏'},
+    ]
 });
 
+function reducer(state = imState, action) {
 
-function reducer(state = initState, action) {
     switch (action.type) {
-        case 'ADD_HOBBY':
-            // const hobbies = state.get('hobbies').push(fromJS(action.hobby))
-            // return state.set('hobbies', hobbies)
-            return state.update('hobbies', hobbies => hobbies.push(fromJS(action.hobby)));
         case 'DEL_HOBBY':
-            console.log(action.hobby);
-            return state.update('hobbies', hobbies => hobbies.filter(hobby => hobby.get('name') !== action.hobby.name))
+            return state.update('hobbies', hobbies => {
+                return hobbies.filter(hobby => {
+                    return action.hobby !== hobby
+                })
+            });
 
+            // return state.update('hobbies', (hobbies) => {
+            //     // let position = hobbies.indexOf(action.hobby);
+            //     // return hobbies.splice(position, 1);
+            //
+            //     return hobbies.filter((hobby) => {
+            //         return action.hobby !== hobby
+            //     })
+            // });
+        case 'ADD_HOBBY':
+            return state.update('hobbies', hobbies => {
+                return hobbies.push(Map(action.hobby))
+            });
         default:
-            return state;
+            return state
     }
+
 }
 
 const store = createStore(reducer);
