@@ -1,48 +1,36 @@
+//      applyMiddleware 应用 一个中间件函数, 来对 redux 进行修饰
+import {createStore, combineReducers, applyMiddleware } from "redux";
+import { Map } from 'immutable';
+// 导入 thunk 方便处理异步
+import thunk from 'redux-thunk';
+import goodsReducer from './goods';
+import stateStruct from './state_struct';
+import shoppingCartReducer from './shoppingCart';
 
-import { createStore } from 'redux'
-import {fromJS, List, Map} from "immutable";
+import userOrderReducer from './order/userOrder';
+import enterpriseOrderReducer from './order/enterpriseOrder';
 
-const imState = fromJS({
-    name: '李',
-    age: 18,
-    address: {
-        city: '武汉',
-        region: '江夏'
-    },
-    hobbies: [
-        {name: 'JavaScript', desc: '是一种前端编程语言'},
-        {name: '王者荣耀', desc: '一种流行手机游戏'},
-    ]
-});
+//   combineReducers 函数 用来将不同的 reducer 进行组合
+// const appReducer = combineReducers({
+//     goods: goodsReducer,
+//     shoppingCart: shoppingCartReducer,
+//     order: {
+//         userOrder: userOrderReducer,
+//         enterpriseOrder: enterpriseOrderReducer
+//     }
+// });
 
-function reducer(state = imState, action) {
 
-    switch (action.type) {
-        case 'DEL_HOBBY':
-            return state.update('hobbies', hobbies => {
-                return hobbies.filter(hobby => {
-                    return action.hobby !== hobby
-                })
-            });
+function appReducer(state = stateStruct, action ) {
 
-            // return state.update('hobbies', (hobbies) => {
-            //     // let position = hobbies.indexOf(action.hobby);
-            //     // return hobbies.splice(position, 1);
-            //
-            //     return hobbies.filter((hobby) => {
-            //         return action.hobby !== hobby
-            //     })
-            // });
-        case 'ADD_HOBBY':
-            return state.update('hobbies', hobbies => {
-                return hobbies.push(Map(action.hobby))
-            });
-        default:
-            return state
-    }
+    const map = new Map({});
+    // map set 方法会返回新值
+    return map
+        .set('goods', goodsReducer(state.get('goods'), action))
+        .set('shoppingCart',shoppingCartReducer(state.get('shoppingCart'), action));
 
 }
 
-const store = createStore(reducer);
-
+//                                  使用 thunk 中间件
+const store = createStore(appReducer, applyMiddleware(thunk));
 export default store;
