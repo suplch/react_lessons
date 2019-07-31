@@ -35,12 +35,13 @@ let shop = observable({
 });
 export default shop;
 // 定义一个connect 函数, 用来 包装我们的业务组件,
-// 第一步 先调用 observer 函数 把原来组件变成可观察的组件,
-// 然后 返回一个高阶组件,追加一个参数 shop
+
 export function connect(WrapComponent) {
+    // 第一步 先调用 observer 函数 把原来组件变成可观察的组件,
     const ObserverComponent= observer(WrapComponent);
     return function (props) {
         return (
+            {/* 然后 返回一个高阶组件,追加一个参数 shop */}
             <ObserverComponent {...props} shop={shop}  />
         )
     }
