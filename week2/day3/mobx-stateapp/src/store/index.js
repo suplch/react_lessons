@@ -40,8 +40,8 @@ export function connect(WrapComponent) {
     // 第一步 先调用 observer 函数 把原来组件变成可观察的组件,
     const ObserverComponent= observer(WrapComponent);
     return function (props) {
+        // 然后 返回一个高阶组件,追加一个参数 shop
         return (
-            {/* 然后 返回一个高阶组件,追加一个参数 shop */}
             <ObserverComponent {...props} shop={shop}  />
         )
     }

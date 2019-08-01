@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from '../store';
 class ProductList extends React.Component{
     render() {
+        console.log(this.props);
+        console.log(this.props.age);
         const products = this.props.shop.goods.products;
         const pickProduct = this.props.shop.pickProduct.bind(this.props.shop);
         return (

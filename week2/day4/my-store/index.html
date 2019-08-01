@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title></title>
+	<script src="./lib/react.development.js"></script>
+    <script src="./lib/react-dom.development.js"></script>
+    <script src="./lib/babel.min.js"></script>
+	
+	
+    <script type="text/javascript">
+    	let record;
+		if (window.plus) {
+			plusReady()
+		} else {
+			//     监听   plusready 事件, 确保 可以 拿到 dcloud 提供 的plus 全局对象
+			//     通过 plus 对象可以访问到 系统的各种功能, 比如 摄像头, 指南针, 等
+			document.addEventListener('plusready', plusReady);
+		}
+		
+		function plusReady() {
+			record = plus.audio.getRecorder(); 
+		}
+		
+    </script>
+	<style>
+		#bcid {
+			background:#0F0;
+			height:480px;
+			width:360px;
+		}
+	</style>
+</head>
+<body>
+<div id="app"></div>
+
+<div id="bcid"></div>
+
+<script type="text/babel">
+	class ButtonGroup extends React.Component {
+		
+		constructor(props) {
+		    super(props);
+			this.codeRef = React.createRef();
+			this.state = {
+				c: '开始录音'
+			};
+		}
+		
+		getCurrentAcceleration() {
+			plus.accelerometer.getCurrentAcceleration((a) => {
+				this.setState({
+					a: 'x' +a.xAxis + " y:" + a.yAxis + " z:" + a.zAxis 
+				});
+			}, (err) => {
+				alert(err.code + ', ' + err.message);
+			})
+		}
+		
+		watchAcceleration() {
+			if (this.wid) {
+				plus.accelerometer.clearWatch(this.wid);
+				this.setState({
+					b: ''
+				})
+				delete this.wid;
+				return;
+			}
+			this.wid = plus.accelerometer.watchAcceleration( ( a ) => {
+				this.setState({
+					b: 'x' +a.xAxis + " y:" + a.yAxis + " z:" + a.zAxis 
+				});
+			}, ( e ) => {
+				plus.nativeUI.alert("watchAcceleration error: " + JSON.stringify(e)); 
+			} ); 
+		}
+		
+		startRecord() {
+			
+			if (this.recording) {
+				record.stop();
+				this.recording = false;
+				this.setState({c: '开始录音'})
+				return;
+			}
+			this.recording = true;
+			this.setState({c: '停止录音'})
+			record.record( {filename:"_doc/audio/"}, (recordFile) => {
+				this.__recordFile = recordFile;
+			}, ( e )=> {
+				this.setState({c: e.message})
+			});
+		}
+		
+		playSound() {
+			let p = plus.audio.createPlayer( this.__recordFile );
+			p.play(()=> {
+				this.setState({d: '播放成功'})
+			}, (e) => {
+				this.setState({d: e.message})
+			}); 
+		}
+		
+		scanCode() {
+			let scan = new plus.barcode.Barcode('bcid');
+			scan.onmarked = (type, result) => {
+				var text = '未知: ';
+				switch(type){
+					case plus.barcode.QR:
+					text = 'QR: ';
+					break;
+					case plus.barcode.EAN13:
+					text = 'EAN13: ';
+					break;
+					case plus.barcode.EAN8:
+					text = 'EAN8: ';
+					break;
+				}
+				scan.close();
+				this.setState({scanCode: text + result})
+			}
+			scan.start();
+		}
+		
+		render() {
+			return (
+			    <div>
+					<button onClick={this.getCurrentAcceleration.bind(this)}>获取当前设备的加速度信息</button>
+					<div>{this.state.a}</div>
+					<hr/>
+					<button onClick={this.watchAcceleration.bind(this)}>监听设备加速度变化信息</button>
+					<div>{this.state.b}</div>
+					<button onClick={this.startRecord.bind(this)}>{this.state.c}</button>
+					<button onClick={this.playSound.bind(this)}>播放</button>
+					<hr/>
+					<button onClick={this.scanCode.bind(this)}>开始扫码</button>
+					<div>扫码结果: {this.state.scanCode}</div>
+				</div>
+			)
+		}
+    }
+	
+	ReactDOM.render(
+		<ButtonGroup />,
+		document.getElementById('app'));
+</script>
+</body>
+</html>

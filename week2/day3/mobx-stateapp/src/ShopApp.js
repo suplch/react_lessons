@@ -10,7 +10,7 @@ export default class ShopApp extends React.Component{
         return (
             <div>
                 产品列表
-                <ProductList/>
+                <ProductList name="张三" age={18} aaa="abcdef"/>
                 购物车
                 <ShoppingCart />
             </div>
